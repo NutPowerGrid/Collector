@@ -1,0 +1,31 @@
+{
+  "name": "collector",
+  "version": "0.1.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "ts-node-dev src/index.ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint src/**",
+    "build": "npm run format && npm run lint && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.lv0.eu/PowerGrid/Collector.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.18",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "prettier": "^2.5.1",
+    "ts-node": "^10.5.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0"
+  }
+}
