@@ -26,6 +26,7 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
+    "@lv00/dot-parser": "^1.0.4",
     "dotenv": "^16.0.0"
   }
 }
