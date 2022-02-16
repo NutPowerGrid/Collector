@@ -1,5 +1,5 @@
 import { ipRegex, nameRegex, portRegex } from './regex';
-import dotParser from '../node_modules/@lv00/dot-parser/lib/cjs';
+import dotParser from '@lv00/dot-parser';
 import { promisify } from 'util';
 import { exec } from 'child_process';
 
@@ -25,7 +25,7 @@ export default class Nut {
   async read() {
     const { stderr, stdout } = await run(this.CMD);
     if (stderr) throw new Error(stderr);
-    const res = dotParser(stdout);
+    const res = dotParser(stdout)
     if (!res) throw new Error('Unable to parse data from Nut');
     return res;
   }

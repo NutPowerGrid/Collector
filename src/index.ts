@@ -7,4 +7,6 @@ const nut = new Nut({ NUT_UPS_NAME, NUT_IP, NUT_PORT });
 
 nut.read().then((res) => {
   console.log(res);
-});
+}).catch(err => {
+  console.log(err)
+})

@@ -1,13 +1,14 @@
-FROM alpine
+FROM node:lts-alpine3.15
 
-RUN apk add nodejs npm
 RUN apk add nut --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
 
 WORKDIR /app
 
-COPY dist dist
-copy package.json .
+COPY src src
+COPY package.json .
 COPY package-lock.json .
-RUN npm i
+COPY .env.local .env
+COPY node_modules node_modules
 
-CMD ["node", "./dist/index.js"]
+
+CMD ["npm", "start"]
