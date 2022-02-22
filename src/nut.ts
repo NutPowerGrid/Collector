@@ -1,7 +1,6 @@
 import dotParser from '@lv00/dot-parser';
 import { promisify } from 'util';
 import { exec } from 'child_process';
-import { INTERVAL, NUT } from './var';
 
 const run = promisify(exec);
 
@@ -11,19 +10,18 @@ export default class Nut {
   readonly name: string;
   readonly CMD: string;
 
-  constructor() {
-    const { IP, NAME, PORT } = NUT();
+  constructor({ IP = '', NAME = '', PORT = '' }) {
     this.ip = IP;
     this.name = NAME;
     this.port = PORT;
-    this.CMD = `upsc ${this.name}@${this.ip}:${this.port}`;
+    this.CMD = `upsc ${this.name}@${this.ip}:${this.port} 2>/dev/null`;
   }
 
-  async readInterval(f: { (data: any): void; (arg0: {}): void }) {
+  async readInterval(f: { (data: any): void; (arg0: {}): void }, interval: number) {
     f(await this.read());
     setInterval(async () => {
       f(await this.read());
-    }, INTERVAL());
+    }, interval);
   }
 
   async read() {

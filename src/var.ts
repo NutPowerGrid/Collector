@@ -6,30 +6,41 @@ export const nameRegex = /^[a-zA-Z0-9/-]*$/g;
 
 config();
 
-export const API = () => {};
-
-export const INTERVAL = () => {
-  const { INTERVAL } = process.env;
-  const DEFAULT = 20000;
-  if (!INTERVAL) return DEFAULT;
-  return Number.isInteger(Number.parseInt(INTERVAL)) ? Number.parseInt(INTERVAL) : DEFAULT;
-};
-
-export const NUT = () => {
-  const { NUT_IP, NUT_PORT, NUT_UPS_NAME } = process.env;
-  const DEFAULT = {
+const VAR = {
+  INTERVAL: 20000,
+  NUT: {
     IP: 'localhost',
     PORT: '3493',
     NAME: 'ups',
-  };
-
-  const IP = NUT_IP ? (NUT_IP.match(ipRegex)?.at(0) ? NUT_IP : DEFAULT.IP) : DEFAULT.IP;
-  const PORT = NUT_PORT ? (NUT_PORT.match(portRegex)?.at(0) ? NUT_PORT : DEFAULT.PORT) : DEFAULT.PORT;
-  const NAME = NUT_UPS_NAME ? (NUT_UPS_NAME.match(nameRegex)?.at(0) ? NUT_UPS_NAME : DEFAULT.NAME) : DEFAULT.NAME;
-
-  return {
-    IP,
-    PORT,
-    NAME,
-  };
+  },
+  INFLUX: {
+    URL: '',
+    ORG: '',
+    TOKEN: '',
+    BUCKET: '',
+    HOST: '',
+  },
 };
+
+// Interval
+const { INTERVAL } = process.env;
+const DEFAULT = 20000;
+const MIN = 20000;
+if (INTERVAL) VAR.INTERVAL = Number.isInteger(Number.parseInt(INTERVAL)) && Number.parseInt(INTERVAL) >= MIN ? Number.parseInt(INTERVAL) : DEFAULT;
+
+// Nut
+const { NUT_IP, NUT_PORT, NUT_UPS_NAME } = process.env;
+
+VAR.NUT.IP = NUT_IP ? (NUT_IP.match(ipRegex)?.at(0) ? NUT_IP : VAR.NUT.IP) : VAR.NUT.IP;
+VAR.NUT.PORT = NUT_PORT ? (NUT_PORT.match(portRegex)?.at(0) ? NUT_PORT : VAR.NUT.PORT) : VAR.NUT.PORT;
+VAR.NUT.NAME = NUT_UPS_NAME ? (NUT_UPS_NAME.match(nameRegex)?.at(0) ? NUT_UPS_NAME : VAR.NUT.NAME) : VAR.NUT.NAME;
+
+// Influx
+const { INFLUX_URL, INFLUX_ORG, INFLUX_TOKEN, INFLUX_BUCKET, HOST } = process.env;
+VAR.INFLUX.URL = INFLUX_URL ? INFLUX_URL : '';
+VAR.INFLUX.ORG = INFLUX_ORG ? INFLUX_ORG : '';
+VAR.INFLUX.TOKEN = INFLUX_TOKEN ? INFLUX_TOKEN : '';
+VAR.INFLUX.BUCKET = INFLUX_BUCKET ? INFLUX_BUCKET : '';
+VAR.INFLUX.HOST = HOST ? HOST : '';
+
+export default VAR;

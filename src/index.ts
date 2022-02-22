@@ -1,7 +1,10 @@
 import Nut from './nut';
+import * as influx from './influx';
+import CONST from './var';
 
-const nut = new Nut();
+const nut = new Nut(CONST.NUT);
 
 nut.readInterval((data) => {
-  console.log(data.ups.realpower)
-});
+  influx.send(data);
+  console.log(data.ups.realpower);
+}, CONST.INTERVAL);

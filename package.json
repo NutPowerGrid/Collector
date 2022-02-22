@@ -28,6 +28,7 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
+    "@influxdata/influxdb-client": "^1.23.0",
     "@lv00/dot-parser": "^1.0.7",
     "dotenv-flow": "^3.2.0"
   }
