@@ -1,6 +1,10 @@
 import { load } from './plugins';
 import Nut from './nut';
 
+process.on('SIGINT', () => {
+  process.exit(0)
+})
+
 const init = async () => {
   const plugins = await load();
   const nut = new Nut();
