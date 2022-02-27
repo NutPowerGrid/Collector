@@ -7,12 +7,12 @@ export const nameRegex = /^[a-zA-Z0-9/-]*$/g;
 config();
 
 export interface modelValue {
-  default?: string | Number | boolean,
-  type: 'string' | 'number' | 'boolean'
-  required?: boolean,
-  min?: Number,
-  max?: Number,
-  regex?: RegExp
+  default?: string | number | boolean;
+  type: 'string' | 'number' | 'boolean';
+  required?: boolean;
+  min?: number;
+  max?: number;
+  regex?: RegExp;
 }
 
 export interface BaseModelObj {
@@ -25,41 +25,39 @@ const interval: modelValue = {
   min: 20000,
   max: 0,
   required: false,
-}
+};
 
 export const parseEnv = (prefix: string[]) => {
-  const { env } = process
-  const res: { [key: string]: any } = {}
-  prefix.forEach(pre => {
+  const { env } = process;
+  const res: { [key: string]: any } = {};
+  prefix.forEach((pre) => {
     const checkValue = (v: string) => {
       const [_blank, value] = v.split(pre.toUpperCase(), 2);
-      if (!res[pre]) res[pre] = {}
+      if (!res[pre]) res[pre] = {};
       res[pre][value.slice(1)] = env[v];
-    }
-    Object.keys(env).forEach(v => {
-      if (v.includes(pre.toUpperCase())) checkValue(v)
-    })
-  })
-  return res
-}
+    };
+    Object.keys(env).forEach((v) => {
+      if (v.includes(pre.toUpperCase())) checkValue(v);
+    });
+  });
+  return res;
+};
 
-export const checkConfig = (obj: { [key: string]: string | Number | boolean }, model: BaseModelObj, modelName: string) => {
-  Object.keys(obj).forEach(v => {
+export const checkConfig = (obj: { [key: string]: string | number | boolean }, model: BaseModelObj, modelName: string) => {
+  Object.keys(obj).forEach((v) => {
     const cProperty = model[v.toLocaleLowerCase()];
-    const cValue = obj[v]
+    const cValue = obj[v];
     if (cProperty) {
-      if (!cValue && cProperty.required) throw new Error(`Missing ${v} for ${modelName.toUpperCase()}`)
-      else if (!cValue && cProperty.default) obj[v] = cProperty.default
-      else if (cProperty.type === 'boolean' && !(cValue === 'true' || cValue === 'false')) throw new Error(`Value ${v} should be an boolean (true, false)`)
+      if (!cValue && cProperty.required) throw new Error(`Missing ${v} for ${modelName.toUpperCase()}`);
+      else if (!cValue && cProperty.default) obj[v] = cProperty.default;
+      else if (cProperty.type === 'boolean' && !(cValue === 'true' || cValue === 'false')) throw new Error(`Value ${v} should be an boolean (true, false)`);
       else if (cProperty.type === 'number') {
         const parsedInt = Number.parseInt(cValue.toString());
-        if (Number.isNaN(parsedInt)) throw new Error(`Value ${v} should be an int (number)`)
-        else if (cProperty.min && cProperty.min > parsedInt) throw new Error(`Value ${v} should be bigger than ${cProperty.min}`)
-        else if (cProperty.max && cProperty.max < parsedInt) throw new Error(`Value ${v} should be lower than ${cProperty.max}`)
-      }
-      else if (cProperty.regex && !cValue.toString().match(cProperty.regex)) throw new Error(`Value ${v} don't respect naming rules`)
-    }
-    else console.warn(`missing value '${v.toLocaleLowerCase()}' in ${modelName.toUpperCase()}`)
-  })
-  return obj
-}
+        if (Number.isNaN(parsedInt)) throw new Error(`Value ${v} should be an int (number)`);
+        else if (cProperty.min && cProperty.min > parsedInt) throw new Error(`Value ${v} should be bigger than ${cProperty.min}`);
+        else if (cProperty.max && cProperty.max < parsedInt) throw new Error(`Value ${v} should be lower than ${cProperty.max}`);
+      } else if (cProperty.regex && !cValue.toString().match(cProperty.regex)) throw new Error(`Value ${v} don't respect naming rules`);
+    } else console.warn(`missing value '${v.toLocaleLowerCase()}' in ${modelName.toUpperCase()}`);
+  });
+  return obj;
+};

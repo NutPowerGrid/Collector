@@ -6,15 +6,14 @@ const init = async () => {
   const nut = new Nut();
 
   nut.readInterval((data) => {
-    plugins.forEach(plugin => plugin.send(data))
-  }, 20000)
-}
+    plugins.forEach((plugin) => plugin.send(data));
+  }, 20000);
+};
 
 init();
 
 // import * as influx from './influx';
 // import * as discord from './discordHook'
-
 
 // const nut = new Nut(CONST.NUT);
 
@@ -23,5 +22,3 @@ init();
 //   //if (CONST.DISCORD) discord.send(data)
 //   console.log(data.ups.realpower);
 // }, CONST.INTERVAL);
-
-

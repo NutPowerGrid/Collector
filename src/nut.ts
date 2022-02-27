@@ -8,22 +8,22 @@ const run = promisify(exec);
 const model: BaseModelObj = {
   ip: {
     type: 'string',
-    default: "127.0.0.1",
+    default: '127.0.0.1',
     required: false,
-    regex: ipRegex
+    regex: ipRegex,
   },
   port: {
     type: 'string',
-    default: "3493",
+    default: '3493',
     required: false,
-    regex: portRegex
+    regex: portRegex,
   },
   ups_name: {
     type: 'string',
     required: true,
-    regex: nameRegex
-  }
-}
+    regex: nameRegex,
+  },
+};
 
 export default class Nut {
   readonly ip: string;
@@ -32,16 +32,16 @@ export default class Nut {
   readonly CMD: string;
 
   constructor() {
-    const config = parseEnv(["nut"]).nut
-    checkConfig(config, model, "nut")
-    
+    const config = parseEnv(['nut']).nut;
+    checkConfig(config, model, 'nut');
+
     this.ip = config.IP;
     this.name = config.UPS_NAME;
     this.port = config.PORT;
     this.CMD = `upsc ${this.name}@${this.ip}:${this.port} 2>/dev/null`;
   }
 
-  async readInterval(f: { (data: any): void; (arg0: {}): void }, interval: number) {
+  async readInterval(f: { (data: any): void; (arg0: any): void }, interval: number) {
     f(await this.read());
     setInterval(async () => {
       f(await this.read());

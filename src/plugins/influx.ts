@@ -5,28 +5,28 @@ import Plugin from './';
 const model: BaseModelObj = {
   url: {
     type: 'string',
-    required: true
+    required: true,
   },
   org: {
     type: 'string',
-    required: true
+    required: true,
   },
   token: {
     type: 'string',
-    required: true
+    required: true,
   },
   bucket: {
     type: 'string',
-    required: true
+    required: true,
   },
   host: {
     type: 'string',
-    required: true
-  }
-}
+    required: true,
+  },
+};
 
 class Influx extends Plugin {
-  static __prefix = "influx"
+  static __prefix = 'influx';
   static __model = model;
 
   client?: InfluxDB;
@@ -39,17 +39,17 @@ class Influx extends Plugin {
       TOKEN,
       ORG,
       BUCKET,
-      HOST
-    }
+      HOST,
+    };
     this.client = new InfluxDB({
       url: URL.toString(),
       token: TOKEN.toString(),
     });
   }
 
-  send(d: { device: { model: string; }; ups: { realpower: string; }; }): void {
+  send(d: { device: { model: string }; ups: { realpower: string } }): void {
     const { client } = this;
-    const { BUCKET, ORG, HOST } = this.config
+    const { BUCKET, ORG, HOST } = this.config;
     if (!client) console.warn('client not ready');
     else {
       const writeApi = client.getWriteApi(ORG.toString(), BUCKET.toString());
@@ -65,9 +65,7 @@ class Influx extends Plugin {
         console.log('\\nUnable to access influx DB');
       });
     }
-
   }
-
 }
 
 export default Influx;
