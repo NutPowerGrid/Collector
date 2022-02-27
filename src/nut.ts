@@ -1,8 +1,29 @@
 import dotParser from '@lv00/dot-parser';
 import { promisify } from 'util';
 import { exec } from 'child_process';
+import { BaseModelObj, checkConfig, ipRegex, nameRegex, parseEnv, portRegex } from './env';
 
 const run = promisify(exec);
+
+const model: BaseModelObj = {
+  ip: {
+    type: 'string',
+    default: "127.0.0.1",
+    required: false,
+    regex: ipRegex
+  },
+  port: {
+    type: 'string',
+    default: "3493",
+    required: false,
+    regex: portRegex
+  },
+  ups_name: {
+    type: 'string',
+    required: true,
+    regex: nameRegex
+  }
+}
 
 export default class Nut {
   readonly ip: string;
@@ -10,10 +31,13 @@ export default class Nut {
   readonly name: string;
   readonly CMD: string;
 
-  constructor({ IP = '', NAME = '', PORT = '' }) {
-    this.ip = IP;
-    this.name = NAME;
-    this.port = PORT;
+  constructor() {
+    const config = parseEnv(["nut"]).nut
+    checkConfig(config, model, "nut")
+    
+    this.ip = config.IP;
+    this.name = config.UPS_NAME;
+    this.port = config.PORT;
     this.CMD = `upsc ${this.name}@${this.ip}:${this.port} 2>/dev/null`;
   }
 
