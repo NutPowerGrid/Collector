@@ -1,6 +1,6 @@
 import { WebhookClient, MessageEmbed } from 'discord.js';
 import { BaseModelObj } from '../env';
-import Plugin from './';
+import Plugin from '.';
 
 const model: BaseModelObj = {
   url: {
