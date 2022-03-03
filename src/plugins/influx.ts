@@ -26,8 +26,8 @@ const model: BaseModelObj = {
 };
 
 class Influx extends Plugin {
-  static __prefix = 'influx';
-  static __model = model;
+  static _prefix = 'influx';
+  static _model = model;
 
   client?: InfluxDB;
   config: { URL: string; TOKEN: string; ORG: string; BUCKET: string; HOST: string };

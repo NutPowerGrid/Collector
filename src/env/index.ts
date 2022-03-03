@@ -1,4 +1,5 @@
 import { config } from 'dotenv-flow';
+import { PluginError } from '../term';
 
 export const ipRegex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/g;
 export const portRegex = /^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/g;
@@ -48,16 +49,16 @@ export const checkConfig = (obj: { [key: string]: string | number | boolean }, m
     const cProperty = model[v.toLocaleLowerCase()];
     const cValue = obj[v];
     if (cProperty) {
-      if (!cValue && cProperty.required) throw new Error(`Missing ${v} for ${modelName.toUpperCase()}`);
+      if (!cValue && cProperty.required) throw new PluginError(`Missing ${v}`, modelName);
       else if (!cValue && cProperty.default) obj[v] = cProperty.default;
-      else if (cProperty.type === 'boolean' && !(cValue === 'true' || cValue === 'false')) throw new Error(`Value ${v} should be an boolean (true, false)`);
+      else if (cProperty.type === 'boolean' && !(cValue === 'true' || cValue === 'false')) throw new PluginError(`Value ${v} should be an boolean (true, false)`, modelName);
       else if (cProperty.type === 'number') {
         const parsedInt = Number.parseInt(cValue.toString());
         if (Number.isNaN(parsedInt)) throw new Error(`Value ${v} should be an int (number)`);
-        else if (cProperty.min && cProperty.min > parsedInt) throw new Error(`Value ${v} should be bigger than ${cProperty.min}`);
-        else if (cProperty.max && cProperty.max < parsedInt) throw new Error(`Value ${v} should be lower than ${cProperty.max}`);
-      } else if (cProperty.regex && !cValue.toString().match(cProperty.regex)) throw new Error(`Value ${v} don't respect naming rules`);
-    } else console.warn(`missing value '${v.toLocaleLowerCase()}' in ${modelName.toUpperCase()}`);
+        else if (cProperty.min && cProperty.min > parsedInt) throw new PluginError(`Value ${v} should be bigger than ${cProperty.min}`, modelName);
+        else if (cProperty.max && cProperty.max < parsedInt) throw new PluginError(`Value ${v} should be lower than ${cProperty.max}`, modelName);
+      } else if (cProperty.regex && !cValue.toString().match(cProperty.regex)) throw new PluginError(`Value ${v} don't respect naming rules`, modelName);
+    } else throw new PluginError(`missing value '${v.toLocaleLowerCase()}'`, modelName);
   });
   return obj;
 };

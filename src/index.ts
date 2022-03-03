@@ -2,15 +2,16 @@ import { load } from './plugins';
 import Nut from './nut';
 
 process.on('SIGINT', () => {
-  process.exit(0)
-})
+  process.exit(0);
+});
 
 const init = async () => {
-  const plugins = await load();
+  const loaded = await load();
+  if (loaded.length === 0) throw new Error('No plugin loaded -> Exiting');
   const nut = new Nut();
 
   nut.readInterval((data) => {
-    plugins.forEach((plugin) => plugin.send(data));
+    loaded.forEach((plugin) => plugin.send(data));
   }, 20000);
 };
 

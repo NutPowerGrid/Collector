@@ -13,8 +13,8 @@ class DiscordHook extends Plugin {
   webhookClient: WebhookClient;
   config: { URL: string };
 
-  static __prefix = 'discord';
-  static __model = model;
+  static _prefix = 'discord';
+  static _model = model;
 
   constructor({ URL }: { [key: string]: string }) {
     super();
