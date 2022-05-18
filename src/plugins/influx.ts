@@ -1,5 +1,5 @@
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
-import { UPS } from 'global';
+import { UPS } from '../global';
 import { BaseModelObj } from '../env';
 import Plugin from './index';
 

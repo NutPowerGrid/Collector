@@ -1,7 +1,7 @@
 import { BaseModelObj, checkConfig, parseEnv } from '../env';
 import { readdir } from 'fs/promises';
 import { PluginError } from '../term';
-import { UPS } from 'global';
+import { UPS } from '../global';
 export const load = async (): Promise<Plugin[]> => {
   // List file from plugin folder
   const plugins = await readdir(__dirname);
