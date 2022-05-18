@@ -8,7 +8,7 @@ COPY ./src ./src
 COPY ./package.json .
 COPY ./package-lock.json .
 COPY .env.local .env
-COPY node_modules node_modules
 
+RUN npm i
 
 CMD ["npm", "start"]

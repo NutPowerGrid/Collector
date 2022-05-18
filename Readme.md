@@ -1,19 +1,28 @@
-# PorwerGrid/Collector
+# NutPowerGrid/Collector
 
 Easily export data from your ups to
 
 - InfluxDB
-- Discord
 
-To Do
+Easily send notification on power loss to
+
+- Discord
+- Gotify
+
+## Requirement
+
+- Docker
+- Nut server
+
+<br>
+
+## 📝 To Do :
 
 - Export to
-  - JSON
+  - FILE (JSON / XML)
   - API (JSON / XML)
-  - DB
   - CSV
 - Error Handling
-- Fix 'required: true' on undefined .env var
 - Dockerfile
 
-🔴‼️ The Dockerfile required you to install npm package on your machine and set up a .env.local file (It make the deployment faster while developing.) ‼️🔴
+### 📢 Development is still in progress. Expect some bugs.
