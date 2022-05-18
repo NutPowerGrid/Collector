@@ -1,6 +1,7 @@
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
+import { UPS } from 'global';
 import { BaseModelObj } from '../env';
-import Plugin from './';
+import Plugin from './index';
 
 const model: BaseModelObj = {
   url: {
@@ -47,7 +48,7 @@ class Influx extends Plugin {
     });
   }
 
-  send(d: { device: { model: string }; ups: { realpower: string } }): void {
+  send(d: UPS): void {
     const { client } = this;
     const { BUCKET, ORG, HOST } = this.config;
     if (!client) console.warn('client not ready');
@@ -57,11 +58,22 @@ class Influx extends Plugin {
       if (!HOST) writeApi.useDefaultTags({ host: d.device.model });
       else writeApi.useDefaultTags({ host: HOST.toString() });
 
-      const point = new Point('ups').intField('realpower', d.ups.realpower);
+      const points = [];
 
-      writeApi.writePoint(point);
+      // ups
+      points.push(new Point('ups').intField('realpower', d.ups.realpower));
+      points.push(new Point('ups').stringField('status', d.ups.status));
+
+      // input
+      points.push(new Point('input').stringField('frequency', d.input.frequency));
+      points.push(new Point('input').stringField('voltage', d.input.voltage));
+      // output
+      points.push(new Point('output').stringField('frequency', d.input.frequency));
+      points.push(new Point('output').stringField('voltage', d.input.voltage));
+
+      writeApi.writePoints(points);
       writeApi.close().catch((e) => {
-        console.error(e);
+        if (process.env.DEBUG) console.error(e);
         console.log('\\nUnable to access influx DB');
       });
     }

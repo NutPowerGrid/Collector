@@ -1,6 +1,7 @@
 import { BaseModelObj, checkConfig, parseEnv } from '../env';
 import { readdir } from 'fs/promises';
 import { PluginError } from '../term';
+import { UPS } from 'global';
 export const load = async (): Promise<Plugin[]> => {
   // List file from plugin folder
   const plugins = await readdir(__dirname);
@@ -15,7 +16,7 @@ export const load = async (): Promise<Plugin[]> => {
   const env_s = parseEnv(pluginsClass.map((plugin: any) => plugin.default._prefix));
 
   // Compare model of plugin to env var
-  let errors: PluginError[] = [];
+  const errors: PluginError[] = [];
   const validPlugins = pluginsClass.filter((plugin: any) => {
     const clAss = plugin.default;
     const env = env_s[clAss._prefix];
@@ -33,11 +34,11 @@ export const load = async (): Promise<Plugin[]> => {
   const loaded = validPlugins.map((plugin: any) => {
     try {
       const clAss = plugin.default;
-      const env = env_s[clAss.__prefix];
+      const env = env_s[clAss._prefix];
       return new clAss(env);
     } catch (err) {
       const error = err as Error;
-      console.log(`${error.message} -> ${plugin.default.__prefix} not loaded`);
+      console.log(`${error.message} -> ${plugin.default._prefix} not loaded`);
     }
   });
 
@@ -48,7 +49,7 @@ abstract class Plugin {
   static _model: BaseModelObj;
   static _prefix: string;
   static _loadEnv?: boolean = true;
-  abstract send(d: any): void;
+  abstract send(d: UPS): void;
 }
 
 export default Plugin;

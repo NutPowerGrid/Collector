@@ -1,6 +1,7 @@
 import { WebhookClient, MessageEmbed } from 'discord.js';
 import { BaseModelObj } from '../env';
-import Plugin from '.';
+import Plugin from './index';
+import { UPS } from 'global';
 
 const model: BaseModelObj = {
   url: {
@@ -25,17 +26,22 @@ class DiscordHook extends Plugin {
     });
   }
 
-  send(d: any): void {
+  send(d: UPS): void {
     const upsName = d.device.model;
     const powerState = d.ups.status;
 
-    if (powerState !== 'OL') {
-      const embed = new MessageEmbed().setTitle(upsName).setColor('#0099ff');
-      this.webhookClient.send({
+    if (powerState !== 'OB') return;
+
+    const embed = new MessageEmbed().setTitle(upsName).setColor('#0099ff');
+    this.webhookClient
+      .send({
         content: `Power outage (${powerState})`,
         embeds: [embed],
+      })
+      .catch((e) => {
+        if (process.env.DEBUG) console.error(e);
+        console.log('\\nUnable to access discord');
       });
-    }
   }
 }
 

@@ -20,14 +20,6 @@ export interface BaseModelObj {
   [key: string]: modelValue;
 }
 
-const interval: modelValue = {
-  type: 'number',
-  default: 20000,
-  min: 20000,
-  max: 0,
-  required: false,
-};
-
 export const parseEnv = (prefix: string[]) => {
   const { env } = process;
   const res: { [key: string]: any } = {};
