@@ -31,6 +31,7 @@
     "@influxdata/influxdb-client": "^1.23.0",
     "@lv00/dot-parser": "^1.0.7",
     "discord.js": "^13.6.0",
-    "dotenv-flow": "^3.2.0"
+    "dotenv-flow": "^3.2.0",
+    "node-fetch": "^2.6.7"
   }
 }
