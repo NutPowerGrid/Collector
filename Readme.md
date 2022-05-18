@@ -1,4 +1,4 @@
-# NutPowerGrid/Collector
+# ⚡ NutPowerGrid/Collector
 
 Easily export data from your ups to
 
@@ -9,12 +9,10 @@ Easily send notification on power loss to
 - Discord
 - Gotify
 
-## Requirement
+## 🔧 Requirement
 
 - Docker
 - Nut server
-
-<br>
 
 ## 📝 To Do :
 
@@ -23,6 +21,5 @@ Easily send notification on power loss to
   - API (JSON / XML)
   - CSV
 - Error Handling
-- Dockerfile
 
-### 📢 Development is still in progress. Expect some bugs.
+#### 📢 Development is still in progress. Expect some bugs.
