@@ -1,7 +1,6 @@
 import { BaseModelObj, checkConfig, parseEnv } from '../env';
 import { readdir } from 'fs/promises';
-import { PluginError } from '../term';
-import { UPS } from '../global';
+import logger from '../logger';
 export const load = async (): Promise<Plugin[]> => {
   // List file from plugin folder
   const plugins = await readdir(__dirname);
@@ -16,20 +15,20 @@ export const load = async (): Promise<Plugin[]> => {
   const env_s = parseEnv(pluginsClass.map((plugin: any) => plugin.default._prefix));
 
   // Compare model of plugin to env var
-  const errors: PluginError[] = [];
   const validPlugins = pluginsClass.filter((plugin: any) => {
     const clAss = plugin.default;
     const env = env_s[clAss._prefix];
     try {
       checkConfig(env, clAss._model, clAss._prefix);
       return clAss;
-    } catch (err) {
-      const error = err as PluginError;
-      errors.push(error);
+    } catch (err: any) {
+      logger.log({
+        level: 'error',
+        message: err.message
+      })
     }
   });
 
-  PluginError.print(errors);
 
   const loaded = validPlugins.map((plugin: any) => {
     try {

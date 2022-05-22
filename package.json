@@ -4,10 +4,10 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "ts-node-dev --files src/index.ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint src/**",
-    "start": "ts-node src/index.ts",
+    "start": "ts-node --files src/index.ts",
     "build": "npm run format && npm run lint && tsc"
   },
   "repository": {
@@ -32,6 +32,7 @@
     "@lv00/dot-parser": "^1.0.7",
     "discord.js": "^13.6.0",
     "dotenv-flow": "^3.2.0",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "winston": "^3.7.2"
   }
 }
