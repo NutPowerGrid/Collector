@@ -1,5 +1,4 @@
 import { BaseModelObj } from '../env';
-import { UPS } from '../global';
 import fetch from 'node-fetch';
 import Plugin from './index';
 
