@@ -1,4 +1,4 @@
-import { WebhookClient, MessageEmbed } from 'discord.js';
+import { WebhookClient, MessageEmbed, ColorResolvable } from 'discord.js';
 import { BaseModelObj } from '../env';
 import Plugin from './index';
 
@@ -9,6 +9,18 @@ const model: BaseModelObj = {
   },
 };
 
+const color: { [key: string]: ColorResolvable } = {
+  OL: '#00D166',
+  OB: '#F93A2F',
+  LB: '#E67E22',
+};
+
+const message: { [key: string]: string } = {
+  OL: 'Power was restored on',
+  OB: 'Power outage on',
+  LB: 'Low battery on',
+};
+
 class DiscordHook extends Plugin {
   webhookClient: WebhookClient;
   config: { URL: string };
@@ -16,12 +28,15 @@ class DiscordHook extends Plugin {
   static _prefix = 'discord';
   static _model = model;
 
+  previousState = '';
+
   constructor({ URL }: { [key: string]: string }) {
     super();
     this.config = { URL };
     this.webhookClient = new WebhookClient({ url: URL });
+    const embed = new MessageEmbed().setTitle('Power monitor enable').setColor(color['OL']);
     this.webhookClient.send({
-      content: 'Power monitor enable',
+      embeds: [embed],
     });
   }
 
@@ -29,18 +44,20 @@ class DiscordHook extends Plugin {
     const upsName = d.device.model;
     const powerState = d.ups.status;
 
-    if (powerState !== 'OB') return;
+    if (!this.previousState) this.previousState = powerState;
+    if (this.previousState == powerState) return;
 
-    const embed = new MessageEmbed().setTitle(upsName).setColor('#0099ff');
+    const embed = new MessageEmbed().setTitle(`${message[powerState]} ${upsName}`).setColor(color[powerState]);
     this.webhookClient
       .send({
-        content: `Power outage (${powerState})`,
         embeds: [embed],
       })
       .catch((err) => {
         if (process.env.DEBUG) console.error(err);
         Plugin._logger.log('error', 'Unable to access discord');
       });
+
+    this.previousState = powerState;
   }
 }
 

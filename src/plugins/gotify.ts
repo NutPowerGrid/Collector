@@ -13,11 +13,26 @@ const model: BaseModelObj = {
   },
 };
 
+const message: { [key: string]: string } = {
+  OL: 'Power was restored on',
+  OB: 'Power outage on',
+  LB: 'Low battery on',
+};
+
+const priority: { [key: string]: number } = {
+  STARTUP: 2,
+  OL: 4,
+  OB: 4,
+  LB: 4,
+};
+
 class Gotify extends Plugin {
+  config: { URL: string; TOKEN: string };
+
   static _prefix = 'gotify';
   static _model = model;
 
-  config: { URL: string; TOKEN: string };
+  previousState = '';
 
   constructor({ URL, TOKEN }: { [key: string]: string }) {
     super();
@@ -32,11 +47,13 @@ class Gotify extends Plugin {
     const powerState = d.ups.status;
     const upsName = d.device.model;
 
-    if (powerState !== 'OB') return;
+    if (!this.previousState) this.previousState = powerState;
+    if (this.previousState == powerState) return;
 
     const body = {
-      message: `Power outage on ${upsName}`,
+      message: `${message[powerState]} ${upsName}`,
       title: `${upsName} (${powerState})`,
+      priority: priority[powerState],
     };
     fetch(`${URL}/message`, {
       method: 'post',
@@ -46,6 +63,8 @@ class Gotify extends Plugin {
       if (process.env.DEBUG) console.error(err);
       Plugin._logger.log('error', 'Unable to access gotify');
     });
+
+    this.previousState = powerState;
   }
 }
 
