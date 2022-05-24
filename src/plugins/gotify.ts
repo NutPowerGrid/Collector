@@ -38,11 +38,13 @@ class Gotify extends Plugin {
       message: `Power outage on ${upsName}`,
       title: `${upsName} (${powerState})`,
     };
-
     fetch(`${URL}/message`, {
       method: 'post',
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json', 'X-Gotify-Key': TOKEN },
+    }).catch((err) => {
+      if (process.env.DEBUG) console.error(err);
+      Plugin._logger.log('error', 'Unable to access gotify');
     });
   }
 }

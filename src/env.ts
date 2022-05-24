@@ -23,7 +23,7 @@ export const parseEnv = (prefix: string[]) => {
   const res: { [key: string]: any } = {};
   prefix.forEach((pre) => {
     const checkValue = (v: string) => {
-      const [_blank, value] = v.split(pre.toUpperCase(), 2);
+      const value = v.split(pre.toUpperCase(), 2)[1];
       if (!res[pre]) res[pre] = {};
       res[pre][value.slice(1)] = env[v];
     };
@@ -36,12 +36,12 @@ export const parseEnv = (prefix: string[]) => {
 
 class EnvError extends Error {
   constructor(msg: string, modelN: string) {
-    super(`${msg} -> ${modelN}`)
+    super(`${msg} -> ${modelN}`);
   }
 }
 
 export const checkConfig = (obj: { [key: string]: string | number | boolean }, model: BaseModelObj, modelName: string) => {
-  if (!obj) throw new EnvError(`No env var found`, modelName);
+  if (!obj) throw new EnvError('No env var found', modelName);
   Object.keys(obj).forEach((v) => {
     const cProperty = model[v.toLocaleLowerCase()];
     const cValue = obj[v];

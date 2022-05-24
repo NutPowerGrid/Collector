@@ -1,4 +1,4 @@
-export { }
+export { };
 
 declare global {
   interface UPS {
@@ -113,6 +113,4 @@ declare global {
     shutdown: string;
     start: string;
   }
-
 }
-

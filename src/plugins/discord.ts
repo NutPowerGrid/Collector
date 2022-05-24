@@ -37,9 +37,9 @@ class DiscordHook extends Plugin {
         content: `Power outage (${powerState})`,
         embeds: [embed],
       })
-      .catch((e) => {
-        if (process.env.DEBUG) console.error(e);
-        console.log('\\nUnable to access discord');
+      .catch((err) => {
+        if (process.env.DEBUG) console.error(err);
+        Plugin._logger.log('error', 'Unable to access discord');
       });
   }
 }
