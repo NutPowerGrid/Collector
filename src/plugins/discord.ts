@@ -10,12 +10,14 @@ const model: BaseModelObj = {
 };
 
 const color: { [key: string]: ColorResolvable } = {
+  STARTUP: '#0099ff',
   OL: '#00D166',
   OB: '#F93A2F',
   LB: '#E67E22',
 };
 
 const message: { [key: string]: string } = {
+  STARTUP: 'Power monitor enable',
   OL: 'Power was restored on',
   OB: 'Power outage on',
   LB: 'Low battery on',
@@ -34,7 +36,7 @@ class DiscordHook extends Plugin {
     super();
     this.config = { URL };
     this.webhookClient = new WebhookClient({ url: URL });
-    const embed = new MessageEmbed().setTitle('Power monitor enable').setColor(color['OL']);
+    const embed = new MessageEmbed().setTitle(message['STARTUP']).setColor(color['STARTUP']);
     this.webhookClient.send({
       embeds: [embed],
     });
