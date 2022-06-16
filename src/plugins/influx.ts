@@ -1,4 +1,5 @@
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
+import logger from 'logger';
 import { BaseModelObj } from '../env';
 import Plugin from './index';
 
@@ -73,7 +74,7 @@ class Influx extends Plugin {
       writeApi.writePoints(points);
       writeApi.close().catch((err) => {
         if (process.env.DEBUG) console.error(err);
-        Plugin._logger.log('error', 'Unable to access influx DB');
+        logger.log('error', 'Unable to access influx DB');
       });
     }
   }

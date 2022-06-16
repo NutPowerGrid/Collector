@@ -1,7 +1,6 @@
 import { BaseModelObj, checkConfig, parseEnv } from '../env';
 import { readdir } from 'fs/promises';
 import logger from '../logger';
-import { Logger } from 'winston';
 export const load = async (): Promise<Plugin[]> => {
   // List file from plugin folder
   const plugins = await readdir(__dirname);
@@ -35,11 +34,10 @@ export const load = async (): Promise<Plugin[]> => {
       const clAss = plugin.default;
       const env = env_s[clAss._prefix];
       const obj = new clAss(env);
-      obj._logger = logger;
       return obj;
     } catch (err) {
       const error = err as Error;
-      console.log(error);
+      logger.log('warn', error);
       logger.log('warn', `${plugin.default._prefix} not loaded`);
     }
   });
@@ -48,7 +46,6 @@ export const load = async (): Promise<Plugin[]> => {
 };
 
 abstract class Plugin {
-  static _logger: Logger;
   static _model: BaseModelObj;
   static _prefix: string;
   static _loadEnv?: boolean = true;

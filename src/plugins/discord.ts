@@ -1,4 +1,5 @@
 import { WebhookClient, MessageEmbed, ColorResolvable } from 'discord.js';
+import logger from 'logger';
 import { BaseModelObj } from '../env';
 import Plugin from './index';
 
@@ -56,7 +57,7 @@ class DiscordHook extends Plugin {
       })
       .catch((err) => {
         if (process.env.DEBUG) console.error(err);
-        Plugin._logger.log('error', 'Unable to access discord');
+        logger.log('error', 'Unable to access discord');
       });
 
     this.previousState = powerState;

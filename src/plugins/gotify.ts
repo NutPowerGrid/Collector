@@ -1,6 +1,7 @@
 import { BaseModelObj } from '../env';
 import fetch from 'node-fetch';
 import Plugin from './index';
+import logger from 'logger';
 
 const model: BaseModelObj = {
   url: {
@@ -61,7 +62,7 @@ class Gotify extends Plugin {
       headers: { 'Content-Type': 'application/json', 'X-Gotify-Key': TOKEN },
     }).catch((err) => {
       if (process.env.DEBUG) console.error(err);
-      Plugin._logger.log('error', 'Unable to access gotify');
+      logger.log('error', 'Unable to access gotify');
     });
 
     this.previousState = powerState;
