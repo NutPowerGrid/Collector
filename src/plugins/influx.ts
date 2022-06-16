@@ -1,5 +1,5 @@
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
-import logger from 'logger';
+import logger from '../logger';
 import { BaseModelObj } from '../env';
 import Plugin from './index';
 

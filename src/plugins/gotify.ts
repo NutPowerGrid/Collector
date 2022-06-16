@@ -1,7 +1,7 @@
 import { BaseModelObj } from '../env';
 import fetch from 'node-fetch';
 import Plugin from './index';
-import logger from 'logger';
+import logger from '../logger';
 
 const model: BaseModelObj = {
   url: {
