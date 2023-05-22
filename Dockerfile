@@ -1,4 +1,4 @@
-FROM node:lts-alpine3.15
+FROM oven/bun:0.6.2
 
 RUN apk add nut --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/
 
@@ -12,4 +12,4 @@ RUN npm i
 
 COPY ./src ./src
 
-CMD ["npm", "start"]
+CMD ["bun", "start"]
