@@ -1,5 +1,4 @@
 import { BaseModelObj } from '../env';
-import fetch from 'node-fetch';
 import Plugin from './index';
 import logger from '../logger';
 
@@ -15,6 +14,7 @@ const model: BaseModelObj = {
 };
 
 const message: { [key: string]: string } = {
+  STARTUP: 'Power monitor enable',
   OL: 'Power was restored on',
   OB: 'Power outage on',
   LB: 'Low battery on',
@@ -41,6 +41,19 @@ class Gotify extends Plugin {
       URL,
       TOKEN,
     };
+    const body = {
+      message: `${message.STARTUP}`,
+      title: message.STARTUP,
+      priority: priority.STARTUP,
+    };
+    fetch(`${URL}/message`, {
+      method: 'post',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json', 'X-Gotify-Key': TOKEN },
+    }).catch((err) => {
+      if (process.env.DEBUG) console.error(err);
+      logger.log('error', 'Unable to access gotify');
+    });
   }
 
   send(d: UPS) {

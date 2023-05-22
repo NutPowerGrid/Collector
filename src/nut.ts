@@ -1,6 +1,6 @@
 import dotParser from '@lv00/dot-parser';
 import { promisify } from 'util';
-import { exec } from 'child_process';
+import { exec } from 'node:child_process';
 import { BaseModelObj, checkConfig, ipRegex, nameRegex, parseEnv, portRegex } from './env';
 
 const run = promisify(exec);

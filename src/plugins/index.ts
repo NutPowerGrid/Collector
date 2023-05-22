@@ -1,5 +1,5 @@
 import { BaseModelObj, checkConfig, parseEnv } from '../env';
-import { readdir } from 'fs/promises';
+import { readdir } from 'node:fs/promises';
 import logger from '../logger';
 export const load = async (): Promise<Plugin[]> => {
   // List file from plugin folder

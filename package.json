@@ -4,11 +4,10 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "ts-node-dev --files src/index.ts",
-    "format": "prettier --write \"src/**/*.ts\"",
+    "dev": "bun run --watch src/index.ts",
+    "format": "prettier --write src/**/*.ts",
     "lint": "eslint src/**",
-    "start": "ts-node --files src/index.ts",
-    "build": "npm run format && npm run lint && tsc"
+    "start": "bun run src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -17,22 +16,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/dotenv-flow": "^3.2.0",
-    "@types/node": "^17.0.18",
-    "@typescript-eslint/eslint-plugin": "^5.12.0",
-    "@typescript-eslint/parser": "^5.12.0",
-    "eslint": "^8.9.0",
-    "prettier": "^2.5.1",
-    "ts-node": "^10.5.0",
-    "ts-node-dev": "^1.1.8",
-    "typescript": "^4.5.5"
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
+    "eslint": "^8.41.0",
+    "prettier": "^2.8.8"
   },
   "dependencies": {
-    "@influxdata/influxdb-client": "^1.23.0",
+    "@influxdata/influxdb-client": "^1.33.2",
     "@lv00/dot-parser": "^1.0.7",
-    "discord.js": "^13.6.0",
-    "dotenv-flow": "^3.2.0",
-    "node-fetch": "^2.6.7",
-    "winston": "^3.7.2"
+    "discord.js": "^13.16.0",
+    "winston": "^3.8.2"
   }
 }
