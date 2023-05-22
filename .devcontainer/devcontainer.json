@@ -1,25 +1,37 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
-	"name": "Ubuntu",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:jammy",
-	"features": {
-		"ghcr.io/devcontainers/features/node:1": {}
-	}
-
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
+	"name": "Bun (Bullseye)",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	
+    "workspaceMount": "src=${localWorkspaceFolder},dst=/workspace,type=bind,consistency=cached",
+    "workspaceFolder": "/workspace",
+	
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [3000, 5000],
+
+	"features": {
+		"common": {
+			"username": "automatic",
+			"uid": "automatic",
+			"gid": "automatic",
+			"installZsh": true,
+			"upgradePackages": true
+		},
+		"docker-from-docker": {
+			"version": "latest",
+			"moby": false,
+			"dockerDashComposeVersion": "v2"
+    	},
+		"github-cli": "latest"
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "uname -a",
+	"postCreateCommand": "zsh .devcontainer/post-create.zsh",
+	// "overrideCommand": false,
 
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "vscode"
 }
