@@ -1,4 +1,4 @@
-FROM oven/bun:0.6.2
+FROM oven/bun:0.6.14
 
 RUN apt update && apt install nut -y
 
