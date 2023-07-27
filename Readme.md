@@ -7,12 +7,12 @@ Easily export data from your ups to
 
 Easily send notification on power loss to
 
-- Discord/Podman
+- Discord
 - Gotify
 
 ## 🔧 Requirement
 
-- Docker
+- Docker/Podman
 - Nut server
 
 ## 📝 To Do :
