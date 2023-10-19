@@ -31,7 +31,7 @@ export const parseEnv = (prefix: string[]) => {
   return res;
 };
 
-class EnvError extends Error {
+export class EnvError extends Error {
   constructor(msg: string, modelN: string) {
     super(`${msg} -> ${modelN}`);
   }
@@ -39,20 +39,54 @@ class EnvError extends Error {
 
 export const checkConfig = (obj: { [key: string]: string | number | boolean }, model: BaseModelObj, modelName: string) => {
   if (!obj) throw new EnvError('No env var found', modelName);
-  Object.keys(obj).forEach((v) => {
-    const cProperty = model[v.toLocaleLowerCase()];
-    const cValue = obj[v];
-    if (cProperty) {
-      if (!cValue && cProperty.required) throw new EnvError(`Missing ${v}`, modelName);
-      else if (!cValue && cProperty.default) obj[v] = cProperty.default;
-      else if (cProperty.type === 'boolean' && !(cValue === 'true' || cValue === 'false')) throw new EnvError(`Value ${v} should be an boolean (true, false)`, modelName);
-      else if (cProperty.type === 'number') {
-        const parsedInt = Number.parseInt(cValue.toString());
-        if (Number.isNaN(parsedInt)) throw new Error(`Value ${v} should be an int (number)`);
-        else if (cProperty.min && cProperty.min > parsedInt) throw new EnvError(`Value ${v} should be bigger than ${cProperty.min}`, modelName);
-        else if (cProperty.max && cProperty.max < parsedInt) throw new EnvError(`Value ${v} should be lower than ${cProperty.max}`, modelName);
-      } else if (cProperty.regex && !cValue.toString().match(cProperty.regex)) throw new EnvError(`Value ${v} don't respect naming rules`, modelName);
-    } else throw new EnvError(`missing value '${v.toLocaleLowerCase()}'`, modelName);
+
+  const checkedObj: { [key: string]: any } = {};
+
+  Object.entries(model).forEach(([key, value]) => {
+    const uKey = key.toUpperCase();
+    const envVarValue = obj[uKey];
+
+    if (value.required && envVarValue === undefined) {
+      throw new EnvError(`Missing required environment variable: ${uKey}`, modelName);
+    }
+
+    if (envVarValue === undefined) {
+      checkedObj[uKey] = value.default;
+      return;
+    }
+
+    if (value.type === 'boolean') {
+      if (envVarValue === 'true') {
+        checkedObj[uKey] = true;
+      } else if (envVarValue === 'false') {
+        checkedObj[uKey] = false;
+      } else {
+        throw new EnvError(`Invalid boolean value for ${uKey}: ${envVarValue}`, modelName);
+      }
+    } else if (value.type === 'number') {
+      const parsedValue = parseInt(envVarValue.toString(), 10);
+
+      if (isNaN(parsedValue)) {
+        throw new EnvError(`Invalid number value for ${uKey}: ${envVarValue}`, modelName);
+      }
+
+      if (value.min !== undefined && parsedValue < value.min) {
+        throw new EnvError(`Value for ${uKey} must be greater than or equal to ${value.min}`, modelName);
+      }
+
+      if (value.max !== undefined && parsedValue > value.max) {
+        throw new EnvError(`Value for ${uKey} must be less than or equal to ${value.max}`, modelName);
+      }
+
+      checkedObj[uKey] = parsedValue;
+    } else if (value.type === 'string') {
+      if (value.regex && !envVarValue.toString().match(value.regex)) {
+        throw new EnvError(`Invalid value for ${uKey}: ${envVarValue}`, modelName);
+      }
+
+      checkedObj[uKey] = envVarValue;
+    }
   });
-  return obj;
+
+  return checkedObj;
 };

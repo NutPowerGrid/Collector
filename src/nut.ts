@@ -32,8 +32,8 @@ export default class Nut {
   readonly CMD: string;
 
   constructor() {
-    const config = parseEnv(['nut']).nut;
-    checkConfig(config, model, 'nut');
+    let config = parseEnv(['nut']).nut;
+    config = checkConfig(config, model, 'nut');
 
     this.ip = config.IP;
     this.name = config.UPS_NAME;
