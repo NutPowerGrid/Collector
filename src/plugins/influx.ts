@@ -74,7 +74,7 @@ class Influx extends Plugin {
       points.push(new Point('output').floatField('voltage', d.output.voltage._value));
 
       writeApi.writePoints(points);
-      writeApi.close().catch((err) => {
+      writeApi.flush().catch((err) => {
         if (process.env.DEBUG) console.error(err);
         logger.log('error', 'Unable to access influx DB');
       });

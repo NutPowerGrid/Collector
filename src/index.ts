@@ -12,7 +12,7 @@ const init = async () => {
 
   nut.readInterval((data) => {
     loaded.forEach((plugin) => plugin.send(data));
-  }, 20000);
+  });
 };
 
 init();

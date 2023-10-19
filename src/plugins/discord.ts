@@ -40,7 +40,8 @@ class DiscordHook extends Plugin {
     const embed = new MessageEmbed().setTitle(message['STARTUP']).setColor(color['STARTUP']);
     this.webhookClient.send({
       embeds: [embed],
-    });
+    }).catch(err => logger.log('error', 'Unable to access discord'));
+
   }
 
   send(d: UPS): void {

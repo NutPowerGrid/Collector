@@ -2,6 +2,7 @@ import dotParser from '@lv00/dot-parser';
 import { promisify } from 'util';
 import { exec } from 'node:child_process';
 import { BaseModelObj, checkConfig, ipRegex, nameRegex, parseEnv, portRegex } from './env';
+import logger from 'logger';
 
 const run = promisify(exec);
 
@@ -23,6 +24,16 @@ const model: BaseModelObj = {
     required: true,
     regex: nameRegex,
   },
+  interval: {
+    type: 'number',
+    default: 20000,
+    required: false,
+  },
+  retries: {
+    type: 'number',
+    default: 5,
+    required: false,
+  },
 };
 
 export default class Nut {
@@ -30,6 +41,10 @@ export default class Nut {
   readonly port: string;
   readonly name: string;
   readonly CMD: string;
+  readonly interval: number;
+  readonly retries: number;
+
+  errorCount = 0;
 
   constructor() {
     let config = parseEnv(['nut']).nut;
@@ -38,14 +53,30 @@ export default class Nut {
     this.ip = config.IP;
     this.name = config.UPS_NAME;
     this.port = config.PORT;
+    this.interval = config.INTERVAL;
+    this.retries = config.RETRIES;
     this.CMD = `upsc ${this.name}@${this.ip}:${this.port} 2>/dev/null`;
   }
 
-  async readInterval(f: (data: UPS) => void, interval: number) {
-    f(await this.read());
-    setInterval(async () => {
-      f(await this.read());
-    }, interval);
+  async readInterval(f: (data: UPS) => void, interval?: number) {
+    const fn = async () => {
+      try {
+        const data = await this.read();
+        f(data);
+        this.errorCount = 0;
+      } catch (e) {
+        this.errorCount++;
+        if (this.errorCount > this.retries) {
+          logger.log({ level: 'error', message: `Unable to read data from Nut after ${this.retries} retries -> Exiting` });
+          clearInterval(inter);
+          process.exit(1);
+        } else {
+          logger.log({ level: 'error', message: 'Unable to read data from Nut' });
+        }
+      }
+    };
+    await fn();
+    const inter = setInterval(async () => await fn(), interval || this.interval);
   }
 
   async read() {
