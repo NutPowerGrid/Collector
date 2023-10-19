@@ -63,7 +63,7 @@ class Influx extends Plugin {
       // ups
       points.push(new Point('ups').intField('realpower', d.ups.realpower));
       points.push(new Point('ups').stringField('status', d.ups.status));
-      points.push(new Point('ups').intField('runtime', Number.parseInt(d.battery.runtime)))
+      points.push(new Point('ups').intField('runtime', Number.parseInt(d.battery.runtime)));
 
       // input
       points.push(new Point('input').floatField('frequency', d.input.frequency));
