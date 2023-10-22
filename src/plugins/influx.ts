@@ -22,7 +22,8 @@ const model: BaseModelObj = {
   },
   host: {
     type: 'string',
-    required: true,
+    required: false,
+    default : "",
   },
 };
 
