@@ -58,7 +58,7 @@ export default class Nut {
     this.CMD = `upsc ${this.name}@${this.ip}:${this.port} 2>/dev/null`;
   }
 
-  async readInterval(f: (data: UPS) => void, interval?: number) {
+  readInterval(f: (data: UPS) => void, interval?: number) {
     const fn = async () => {
       try {
         const data = await this.read();
@@ -75,8 +75,9 @@ export default class Nut {
         }
       }
     };
-    await fn();
-    const inter = setInterval(async () => await fn(), interval || this.interval);
+    fn();
+    const inter = setInterval(() => fn(), interval || this.interval);
+    return inter;
   }
 
   async read() {

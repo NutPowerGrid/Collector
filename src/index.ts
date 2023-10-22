@@ -10,8 +10,16 @@ const init = async () => {
   }
   const nut = new Nut();
 
-  nut.readInterval((data) => {
+  const interval = nut.readInterval((data) => {
     loaded.forEach((plugin) => plugin.send(data));
+  });
+
+  process.on('SIGINT', () => {
+    console.log();
+    logger.log({ level: 'info', message: 'Exiting gracefully 🍺' });
+    clearInterval(interval);
+    loaded.forEach((plugin) => plugin.close());
+    process.exit(0);
   });
 };
 

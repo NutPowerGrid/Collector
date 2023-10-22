@@ -64,6 +64,11 @@ class DiscordHook extends Plugin {
 
     this.previousState = powerState;
   }
+
+  close(): void {
+    this.webhookClient.destroy();
+    logger.log('info', 'Discord plugin closed');
+  }
 }
 
 export default DiscordHook;

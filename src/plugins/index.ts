@@ -51,6 +51,7 @@ abstract class Plugin {
   static _loadEnv?: boolean = true;
 
   abstract send(d: UPS): void;
+  abstract close(): void;
 }
 
 export default Plugin;

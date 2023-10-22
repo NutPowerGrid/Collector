@@ -80,6 +80,10 @@ class Gotify extends Plugin {
 
     this.previousState = powerState;
   }
+
+  close(): void {
+    logger.log('info', 'Gotify plugin closed');
+  }
 }
 
 export default Gotify;
