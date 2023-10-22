@@ -46,11 +46,11 @@ export const checkConfig = (obj: { [key: string]: string | number | boolean }, m
     const uKey = key.toUpperCase();
     const envVarValue = obj[uKey];
 
-    if (value.required && envVarValue === undefined) {
+    if (value.required && !envVarValue) {
       throw new EnvError(`Missing required environment variable: ${uKey}`, modelName);
     }
 
-    if (envVarValue === undefined) {
+    if (!envVarValue && value.default) {
       checkedObj[uKey] = value.default;
       return;
     }
