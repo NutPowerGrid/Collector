@@ -50,6 +50,9 @@ export const checkConfig = (obj: { [key: string]: string | number | boolean }, m
       checkedObj[uKey] = value.default;
       return;
     }
+    else if (!envVarValue) {
+      return;
+    }
 
     if (value.type === 'boolean') {
       if (envVarValue === 'true') {

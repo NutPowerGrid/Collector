@@ -1,4 +1,4 @@
-import { checkConfig, EnvError, BaseModelObj } from './env';
+import { checkConfig, EnvError, BaseModelObj, parseEnv } from './env';
 import { describe, it, expect } from 'bun:test';
 
 describe('checkConfig', () => {
@@ -17,7 +17,12 @@ describe('checkConfig', () => {
     NAME: {
       type: 'string',
       required: false,
+      default: 'test',
       regex: /^[a-zA-Z0-9/-]*$/g,
+    },
+    DEBUG: {
+      type: 'boolean',
+      required: false,
     },
   };
 
@@ -54,10 +59,39 @@ describe('checkConfig', () => {
   });
 
   it('should set a default value if an optional env var is missing', () => {
-    expect(checkConfig({ PORT: 3000, IP: '127.0.0.1' }, { ...model, NAME: { type: 'string', required: false, default: 'default-name' } }, 'TestModel')).toEqual({
+    expect(checkConfig({ PORT: 3000, IP: '127.0.0.1', TEST: 'false' }, { ...model, TEST: { type: 'boolean', required: true } }, 'TestModel')).toEqual({
       PORT: 3000,
       IP: '127.0.0.1',
-      NAME: 'default-name',
+      TEST: false,
+      NAME: 'test',
     });
+  });
+});
+
+describe('parseEnv', () => {
+  const prefix = 'TEST';
+
+  process.env[`${prefix}_PORT`] = "3000";
+  process.env[`${prefix}_IP`] = '127.0.0.1';
+  process.env[`${prefix}_NAME`] = 'test';
+
+  const expected = {
+    PORT: "3000",
+    IP: '127.0.0.1',
+    NAME: 'test',
+  };
+
+  it('should return an object with the expected keys and values', () => {
+    expect(parseEnv(prefix)).toEqual(expected);
+  });
+
+  it('should return an empty object if no matching env vars found', () => {
+    const prefix2 = 'TEST2';
+    expect(parseEnv(prefix2)).toEqual({});
+  });
+
+  it('should ignore env vars with incorrect prefix', () => {
+    process.env['OTHER_PREFIX_PORT'] = '3000';
+    expect(parseEnv(prefix)).toEqual(expected);
   });
 });
