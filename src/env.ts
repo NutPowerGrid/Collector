@@ -15,18 +15,14 @@ export interface BaseModelObj {
   [key: string]: modelValue;
 }
 
-export const parseEnv = (prefix: string[]) => {
+export const parseEnv = (prefix: string) => {
   const { env } = process;
   const res: { [key: string]: any } = {};
-  prefix.forEach((pre) => {
-    const checkValue = (v: string) => {
-      const value = v.split(pre.toUpperCase(), 2)[1];
-      if (!res[pre]) res[pre] = {};
-      res[pre][value.slice(1)] = env[v];
+  Object.keys(env).forEach((v) => {
+    if (v.includes(prefix.toUpperCase())) {
+      const value = v.split(prefix.toUpperCase(), 2)[1];
+      res[value.slice(1)] = env[v];
     };
-    Object.keys(env).forEach((v) => {
-      if (v.includes(pre.toUpperCase())) checkValue(v);
-    });
   });
   return res;
 };
