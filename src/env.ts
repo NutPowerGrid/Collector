@@ -17,12 +17,12 @@ export interface BaseModelObj {
 
 export const parseEnv = (prefix: string) => {
   const { env } = process;
-  const res: { [key: string]: any } = {};
+  const res: { [key: string]: string | undefined } = {};
   Object.keys(env).forEach((v) => {
     if (v.includes(prefix.toUpperCase())) {
       const value = v.split(prefix.toUpperCase(), 2)[1];
       res[value.slice(1)] = env[v];
-    };
+    }
   });
   return res;
 };
@@ -36,7 +36,7 @@ export class EnvError extends Error {
 export const checkConfig = (obj: { [key: string]: string | number | boolean }, model: BaseModelObj, modelName: string) => {
   if (!obj) throw new EnvError('No env var found', modelName);
 
-  const checkedObj: { [key: string]: any } = {};
+  const checkedObj: { [key: string]: string | number | boolean } = {};
 
   Object.entries(model).forEach(([key, value]) => {
     const uKey = key.toUpperCase();

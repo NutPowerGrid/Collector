@@ -87,7 +87,7 @@ class Influx extends Plugin {
     if (this.client && this.writeApi) {
       const flushed = this.writeApi.dispose();
       logger.log('info', `Influx plugin : ${flushed} points flushed`);
-      logger.log('info', `Influx plugin closed`);
+      logger.log('info', 'Influx plugin closed');
     }
   }
 }

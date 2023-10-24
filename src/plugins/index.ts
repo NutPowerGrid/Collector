@@ -3,7 +3,6 @@ import { readdir } from 'node:fs/promises';
 import path from 'node:path';
 import logger from '../logger';
 
-
 abstract class Plugin {
   static _model: BaseModelObj;
   static _prefix: string;
@@ -24,7 +23,7 @@ export default Plugin;
 
 export const load = async (): Promise<Plugin[]> => {
   // Get rid of index.ts and index.test.ts
-  const plugins = (await readdir(__dirname)).filter((file) => !file.includes("index"));
+  const plugins = (await readdir(__dirname)).filter((file) => !file.includes('index'));
 
   const validPlugins = await Promise.all(
     plugins.map(async (plugin) => {
@@ -50,14 +49,14 @@ export const load = async (): Promise<Plugin[]> => {
         const pluginInstance = new pluginClass(env); // Inject env in constructor
         return pluginInstance;
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Unknown error."
+        const message = err instanceof Error ? err.message : 'Unknown error.';
         logger.log({
           level: 'error',
-          message 
+          message,
         });
         return null;
       }
-    })
+    }),
   );
 
   return validPlugins.filter((plugin) => plugin !== null) as Plugin[];

@@ -17,7 +17,6 @@ const color: { [key: string]: ColorResolvable } = {
   LB: '#E67E22',
 };
 
-
 class DiscordHook extends Plugin {
   webhookClient: WebhookClient;
   config: { URL: string };
@@ -36,7 +35,7 @@ class DiscordHook extends Plugin {
       .send({
         embeds: [embed],
       })
-      .catch((err) => logger.log('error', 'Unable to access discord'));
+      .catch(() => logger.log('error', 'Unable to access discord'));
   }
 
   send(d: UPS): void {
