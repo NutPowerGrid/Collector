@@ -17,12 +17,6 @@ const color: { [key: string]: ColorResolvable } = {
   LB: '#E67E22',
 };
 
-const message: { [key: string]: string } = {
-  STARTUP: 'Power monitor enable',
-  OL: 'Power was restored on',
-  OB: 'Power outage on',
-  LB: 'Low battery on',
-};
 
 class DiscordHook extends Plugin {
   webhookClient: WebhookClient;
@@ -37,7 +31,7 @@ class DiscordHook extends Plugin {
     super();
     this.config = { URL };
     this.webhookClient = new WebhookClient({ url: URL });
-    const embed = new MessageEmbed().setTitle(message['STARTUP']).setColor(color['STARTUP']);
+    const embed = new MessageEmbed().setTitle(this.message['STARTUP']).setColor(color['STARTUP']);
     this.webhookClient
       .send({
         embeds: [embed],
@@ -52,7 +46,7 @@ class DiscordHook extends Plugin {
     if (!this.previousState) this.previousState = powerState;
     if (this.previousState == powerState) return;
 
-    const embed = new MessageEmbed().setTitle(`${message[powerState]} ${upsName}`).setColor(color[powerState]);
+    const embed = new MessageEmbed().setTitle(`${this.message[powerState]} ${upsName}`).setColor(color[powerState]);
     this.webhookClient
       .send({
         embeds: [embed],

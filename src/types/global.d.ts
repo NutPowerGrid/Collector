@@ -100,7 +100,7 @@ declare global {
     productid: string;
     realpower: string;
     serial: string;
-    status: string;
+    status: "OL" | "OB" | "LB";
     timer: Delay;
     vendorid: string;
   }

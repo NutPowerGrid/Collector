@@ -9,6 +9,13 @@ abstract class Plugin {
   static _prefix: string;
   static _loadEnv?: boolean = true;
 
+  message = {
+    STARTUP: 'Power monitor enable',
+    OL: 'Power was restored',
+    OB: 'Power outage',
+    LB: 'Low battery',
+  };
+
   abstract send(d: UPS): void;
   abstract close(): void;
 }

@@ -13,13 +13,6 @@ const model: BaseModelObj = {
   },
 };
 
-const message: { [key: string]: string } = {
-  STARTUP: 'Power monitor enable',
-  OL: 'Power was restored on',
-  OB: 'Power outage on',
-  LB: 'Low battery on',
-};
-
 const priority: { [key: string]: number } = {
   STARTUP: 2,
   OL: 4,
@@ -42,8 +35,8 @@ class Gotify extends Plugin {
       TOKEN,
     };
     const body = {
-      message: `${message.STARTUP}`,
-      title: message.STARTUP,
+      message: `${this.message.STARTUP}`,
+      title: this.message.STARTUP,
       priority: priority.STARTUP,
     };
     fetch(`${URL}/message`, {
@@ -65,7 +58,7 @@ class Gotify extends Plugin {
     if (this.previousState == powerState) return;
 
     const body = {
-      message: `${message[powerState]} ${upsName}`,
+      message: `${this.message[powerState]} ${upsName}`,
       title: `${upsName} (${powerState})`,
       priority: priority[powerState],
     };
