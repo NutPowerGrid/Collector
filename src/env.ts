@@ -33,7 +33,7 @@ export class EnvError extends Error {
   }
 }
 
-export const checkConfig = (obj: { [key: string]: string | number | boolean }, model: BaseModelObj, modelName: string) => {
+export const checkConfig = (obj: { [key: string]: string | undefined }, model: BaseModelObj, modelName: string) => {
   if (!obj) throw new EnvError('No env var found', modelName);
 
   const checkedObj: { [key: string]: string | number | boolean } = {};
