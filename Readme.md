@@ -18,8 +18,7 @@ Easily send notification on power loss to
 ## 📝 To Do :
 
 - Export to
-  - FILE (JSON / XML)
-  - API (JSON / XML)
+  - API (JSON)
   - CSV
 
 ## 🌄 Screenshot :

@@ -38,7 +38,7 @@ const model: BaseModelObj = {
 
 export default class Nut {
   readonly ip: string;
-  readonly port: string;
+  readonly port: number;
   readonly name: string;
   readonly CMD: string;
   readonly interval: number;
@@ -47,14 +47,14 @@ export default class Nut {
   errorCount = 0;
 
   constructor() {
-    let config = parseEnv('nut');
-    config = checkConfig(config, model, 'nut');
+    let env = parseEnv('nut');
+    const config = checkConfig(env, model, 'nut');
 
-    this.ip = config.IP;
-    this.name = config.UPS_NAME;
-    this.port = config.PORT;
-    this.interval = config.INTERVAL;
-    this.retries = config.RETRIES;
+    this.ip = config.IP as string;
+    this.name = config.UPS_NAME as string;
+    this.port = config.PORT as number;
+    this.interval = config.INTERVAL as number;
+    this.retries = config.RETRIES as number;
     this.CMD = `upsc ${this.name}@${this.ip}:${this.port} 2>/dev/null`;
   }
 
@@ -65,6 +65,7 @@ export default class Nut {
         f(data);
         this.errorCount = 0;
       } catch (e) {
+        console.error(e);
         this.errorCount++;
         if (this.errorCount > this.retries) {
           logger.log({ level: 'error', message: `Unable to read data from Nut after ${this.retries} retries -> Exiting` });
