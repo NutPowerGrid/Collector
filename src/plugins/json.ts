@@ -17,7 +17,6 @@ export default class Json extends Plugin {
   constructor({ PATH }: { PATH: string }) {
     super()
     this.path = PATH
-    console.log(this.path);
   }
 
   send(d: UPS) {
