@@ -24,29 +24,26 @@ export class CSV extends Array<Array<string | number>> {
     return lastLine.push(s);
   }
 
-  toString(separator = ";", header = true): string {
+  toString(separator = ';', header = true): string {
     const copy = this.slice(header ? 0 : 1);
-    return copy.map((c) =>
-      c.map((e) => (typeof e === "string" ? '"' + e.trim() + '"' : e)).join(separator)
-    ).join("\r\n");
+    return copy.map((c) => c.map((e) => (typeof e === 'string' ? '"' + e.trim() + '"' : e)).join(separator)).join('\r\n');
   }
 
-  toStringEncoded(separator = ";", rules: { from: RegExp | string, to: string }[]) {
+  toStringEncoded(separator = ';', rules: { from: RegExp | string; to: string }[]) {
     return this.map((l) =>
       l
         .map((v) => {
-          if (typeof v === "string") {
+          if (typeof v === 'string') {
             rules.forEach(({ from, to }) => {
-              //@ts-ignore
-              v = v.replaceAll(from, to);
+              v = (v as string).replaceAll(from, to);
             });
           }
           return v;
         })
-        .map((e) => (typeof e === "string" ? '"' + e.trim() + '"' : e)) // Add trailing around string
-        .join(separator)
+        .map((e) => (typeof e === 'string' ? '"' + e.trim() + '"' : e)) // Add trailing around string
+        .join(separator),
     ) // Add CSV separator
-      .join("\r\n"); // Add break line
+      .join('\r\n'); // Add break line
   }
 
   static readString(csv: string) {

@@ -71,12 +71,12 @@ describe('checkConfig', () => {
 describe('parseEnv', () => {
   const prefix = 'TEST';
 
-  process.env[`${prefix}_PORT`] = "3000";
+  process.env[`${prefix}_PORT`] = '3000';
   process.env[`${prefix}_IP`] = '127.0.0.1';
   process.env[`${prefix}_NAME`] = 'test';
 
   const expected = {
-    PORT: "3000",
+    PORT: '3000',
     IP: '127.0.0.1',
     NAME: 'test',
   };

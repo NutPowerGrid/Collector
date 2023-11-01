@@ -1,7 +1,7 @@
-import Plugin from "plugins";
+import Plugin from 'plugins';
 import fs from 'fs';
-import logger from "logger";
-import { BaseModelObj } from "env";
+import logger from 'logger';
+import { BaseModelObj } from 'env';
 
 export default class Json extends Plugin {
   static _prefix = 'JSON';
@@ -15,19 +15,18 @@ export default class Json extends Plugin {
   path: string;
 
   constructor({ PATH }: { PATH: string }) {
-    super()
-    this.path = PATH
+    super();
+    this.path = PATH;
   }
 
   send(d: UPS) {
     const data = {
       date: new Date().toISOString(),
-      data: d
+      data: d,
     };
 
     // Read the existing data from the file
     try {
-
       let dataArray = [];
 
       if (fs.existsSync(this.path)) {
@@ -37,7 +36,7 @@ export default class Json extends Plugin {
         } catch (error) {
           logger.log({
             level: 'error',
-            message: "Malformed JSON file",
+            message: 'Malformed JSON file',
           });
         }
       }
@@ -47,7 +46,7 @@ export default class Json extends Plugin {
     } catch (error) {
       logger.log({
         level: 'error',
-        message: "Unale to write data to JSON file",
+        message: 'Unale to write data to JSON file',
       });
     }
   }

@@ -49,8 +49,7 @@ export const checkConfig = (obj: { [key: string]: string | undefined }, model: B
     if (!envVarValue && value.default) {
       checkedObj[uKey] = value.default;
       return;
-    }
-    else if (!envVarValue) {
+    } else if (!envVarValue) {
       return;
     }
 

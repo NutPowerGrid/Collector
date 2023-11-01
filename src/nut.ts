@@ -47,7 +47,7 @@ export default class Nut {
   errorCount = 0;
 
   constructor() {
-    let env = parseEnv('nut');
+    const env = parseEnv('nut');
     const config = checkConfig(env, model, 'nut');
 
     this.ip = config.IP as string;

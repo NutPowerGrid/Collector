@@ -2,10 +2,8 @@ import { CSV } from './csv';
 import { describe, it, expect } from 'bun:test';
 
 describe('CSV', () => {
-
-  const header = ['Name', 'Age', 'Email']
-  const headersEncoded = header.map((h) => `"${h}"`).join(",") + "\r\n";
-
+  const header = ['Name', 'Age', 'Email'];
+  const headersEncoded = header.map((h) => `"${h}"`).join(',') + '\r\n';
 
   describe('constructor', () => {
     it('should set the header and maxCol properties', () => {
@@ -59,7 +57,7 @@ describe('CSV', () => {
       csv.addSequentially(30);
       csv.addSequentially('john@example.com');
       const rules = [
-        { from: /\./g, to: '\\\.' }, // escape dots
+        { from: /\./g, to: '\\.' }, // escape dots
         { from: /@/g, to: '\\@' }, // escape @
       ];
       expect(csv.toStringEncoded(',', rules)).toBe(headersEncoded + '"John",30,"john\\@example\\.com"');
