@@ -14,13 +14,18 @@ const init = async () => {
     loaded.forEach((plugin) => plugin.send(data));
   });
 
-  process.on('SIGINT', () => {
-    console.log();
-    logger.log({ level: 'info', message: 'Exiting gracefully 🍺' });
-    clearInterval(interval);
-    loaded.forEach((plugin) => plugin.close());
-    process.exit(0);
-  });
+  function exitOnSignal(signal: string) {
+    process.on(signal, function () {
+      console.log();
+      logger.log({ level: 'info', message: 'Exiting gracefully 🍺' });
+      clearInterval(interval);
+      loaded.forEach((plugin) => plugin.close());
+      process.exit(0);
+    });
+  }
+
+  exitOnSignal('SIGINT')
+  exitOnSignal('SIGTERM')
 };
 
 init();
