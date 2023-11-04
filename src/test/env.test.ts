@@ -1,4 +1,4 @@
-import { checkConfig, EnvError, BaseModelObj, parseEnv } from './env';
+import { checkConfig, EnvError, BaseModelObj, parseEnv } from '../env';
 import { describe, it, expect } from 'bun:test';
 
 describe('checkConfig', () => {

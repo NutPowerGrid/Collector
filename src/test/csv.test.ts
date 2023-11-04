@@ -1,4 +1,4 @@
-import { CSV } from './csv';
+import { CSV } from '../csv';
 import { describe, it, expect } from 'bun:test';
 
 describe('CSV', () => {
