@@ -28,8 +28,8 @@ const init = async () => {
     });
   }
 
-  exitOnSignal('SIGINT')
-  exitOnSignal('SIGTERM')
+  exitOnSignal('SIGINT');
+  exitOnSignal('SIGTERM');
 };
 
 init();
