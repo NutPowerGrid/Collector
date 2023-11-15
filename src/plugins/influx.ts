@@ -2,6 +2,7 @@ import { InfluxDB, Point, WriteApi } from '@influxdata/influxdb-client';
 import logger from '../logger';
 import { BaseModelObj } from '../env';
 import Plugin from './index';
+import { hostname } from 'os';
 
 const model: BaseModelObj = {
   url: {
@@ -32,7 +33,6 @@ class Influx extends Plugin {
   static _model = model;
 
   client?: InfluxDB;
-  writeApi?: WriteApi;
   config: { URL: string; TOKEN: string; ORG: string; BUCKET: string; HOST: string };
 
   constructor({ URL, TOKEN, ORG, BUCKET, HOST }: { [key: string]: string }) {
@@ -55,28 +55,34 @@ class Influx extends Plugin {
     const { BUCKET, ORG, HOST } = this.config;
     if (!client) console.warn('client not ready');
     else {
-      this.writeApi = client.getWriteApi(ORG.toString(), BUCKET.toString());
+      const writeApi = client.getWriteApi(ORG.toString(), BUCKET.toString()) || undefined;
 
-      if (!HOST) this.writeApi.useDefaultTags({ host: d.device.model });
-      else this.writeApi.useDefaultTags({ host: HOST.toString() });
+      const tags = {
+        host: HOST ? HOST.toString() : hostname(),
+        serial: d.device.serial,
+        model: d.device.model,
+        mfr: d.device.mfr,
+      };
 
-      const points = [];
+      writeApi.useDefaultTags(tags);
 
-      // ups
+      const points: Point[] = [];
+
+      // general
       points.push(new Point('ups').intField('realpower', d.ups.realpower));
       points.push(new Point('ups').stringField('status', d.ups.status));
       points.push(new Point('ups').intField('runtime', Number.parseInt(d.battery.runtime)));
 
       // input
-      points.push(new Point('input').floatField('frequency', d.input.frequency));
-      points.push(new Point('input').floatField('voltage', d.input.voltage._value));
+      points.push(new Point('ups').floatField('input_frequency', d.input.frequency));
+      points.push(new Point('ups').floatField('input_voltage', d.input.voltage._value));
 
       // output
-      points.push(new Point('output').floatField('frequency', d.output.frequency._value));
-      points.push(new Point('output').floatField('voltage', d.output.voltage._value));
+      points.push(new Point('ups').floatField('output_frequency', d.output.frequency._value));
+      points.push(new Point('ups').floatField('output_voltage', d.output.voltage._value));
 
-      this.writeApi.writePoints(points);
-      this.writeApi.flush().catch((err: Error) => {
+      writeApi.writePoints(points);
+      writeApi.close().catch((err: Error) => {
         if (process.env.DEBUG) console.error(err);
         logger.log('error', 'Unable to access influx DB');
       });
@@ -84,11 +90,7 @@ class Influx extends Plugin {
   }
 
   close(): void {
-    if (this.client && this.writeApi) {
-      const flushed = this.writeApi.dispose();
-      logger.log('info', `Influx plugin : ${flushed} points flushed`);
-      logger.log('info', 'Influx plugin closed');
-    }
+    logger.log('info', 'Influx plugin closed');
   }
 }
 
