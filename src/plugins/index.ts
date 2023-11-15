@@ -15,6 +15,16 @@ abstract class Plugin {
     LB: 'Low battery',
   };
 
+  headerMapping: Array<{ name: string; location: string[] }> = [
+    { name: 'realpower', location: ['ups', 'realpower'] },
+    { name: 'status', location: ['ups', 'status'] },
+    { name: 'runtime', location: ['battery', 'runtime'] },
+    { name: 'input_frequency', location: ['input', 'frequency'] },
+    { name: 'input_voltage', location: ['input', 'voltage', '_value'] },
+    { name: 'output_frequency', location: ['output', 'frequency', '_value'] },
+    { name: 'output_voltage', location: ['output', 'voltage', '_value'] },
+  ];
+
   abstract send(d: UPS): void;
   abstract close(): void;
 }
