@@ -4,16 +4,6 @@ import logger from 'logger';
 import { BaseModelObj } from 'env';
 import { CSV } from 'csv';
 
-const headerMapping: Record<string, string[]> = {
-  realpower: ['ups', 'realpower'],
-  status: ['ups', 'status'],
-  runtime: ['battery', 'runtime'],
-  input_frequency: ['input', 'frequency'],
-  input_voltage: ['input', 'voltage', '_value'],
-  output_frequency: ['output', 'frequency', '_value'],
-  output_voltage: ['output', 'voltage', '_value'],
-};
-
 export default class CSVPlugin extends Plugin {
   static _prefix = 'CSV';
   static _model: BaseModelObj = {
@@ -30,21 +20,17 @@ export default class CSVPlugin extends Plugin {
     super();
     this.path = PATH;
 
-    const header = ['date'].concat(Object.keys(headerMapping));
+    const header = ['date'].concat(this.headerMapping.map((h) => h.name));
     this.csv = new CSV({ header });
   }
 
   send(d: UPS) {
     this.csv.addSequentially(new Date().toISOString());
 
-    this.csv
-      .getHeader()
-      .slice(1)
-      .forEach((h) => {
-        const pinPoint = headerMapping[h];
-        const value = pinPoint.reduce((acc, cur) => (acc as any)[cur], d as any); 
-        this.csv.addSequentially(value);
-      });
+    this.headerMapping.forEach(({ name, location }) => {
+      const value = location.reduce((acc, cur) => (acc as any)[cur], d as any);
+      this.csv.addSequentially(value);
+    });
 
     // Write the CSV to the file
     if (!fs.existsSync(this.path) || fs.statSync(this.path).size === 0) {
@@ -53,6 +39,8 @@ export default class CSVPlugin extends Plugin {
     } else {
       const csvString = '\r\n' + this.csv.toString(';', false);
       fs.appendFileSync(this.path, csvString, 'utf8');
+      //remove points written to csv
+      this.csv.clear();
     }
   }
 

@@ -65,7 +65,7 @@ export default class Nut {
         f(data);
         this.errorCount = 0;
       } catch (e) {
-        console.error(e);
+        logger.log({ level: 'error', message: e.message });
         this.errorCount++;
         if (this.errorCount > this.retries) {
           logger.log({ level: 'error', message: `Unable to read data from Nut after ${this.retries} retries -> Exiting` });

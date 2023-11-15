@@ -46,6 +46,10 @@ export class CSV extends Array<Array<string | number>> {
       .join('\r\n'); // Add break line
   }
 
+  clear() {
+    this.splice(1);
+  }
+
   static readString(csv: string) {
     //TODO : Not implemented
   }
