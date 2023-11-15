@@ -64,6 +64,20 @@ describe('CSV', () => {
     });
   });
 
+  describe('clean', () => {
+    it('should clean the CSV and keep the header', () => {
+      const csv = new CSV({ header });
+      csv.addSequentially('John');
+      csv.addSequentially(30);
+      csv.addSequentially('john@example.com');
+      expect(csv.toString(',', false)).toBe('"John",30,"john@example.com"');
+      csv.clear();
+      expect(csv).toEqual([header]);
+      expect(csv.length).toBe(1);
+
+    })
+  })
+
   // describe('readString', () => {
   //   it('should parse a CSV string and return a CSV object', () => {
   //     const csvString = 'Name,Age,Email\nJohn,30,john@example.com\nJane,25,jane@example.com\n';
