@@ -51,7 +51,7 @@ export const load = async (): Promise<Plugin[]> => {
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Unknown error.';
         logger.log({
-          level: 'error',
+          level: 'warn',
           message,
         });
         return null;
