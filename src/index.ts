@@ -16,6 +16,7 @@ const init = async () => {
 
   const interval = nut.readInterval((data) => {
     loaded.forEach((plugin) => plugin.send(data));
+    if (process.env.DEBUG) console.log(getMemoryUsage());
   });
 
   function exitOnSignal(signal: string) {
