@@ -74,9 +74,8 @@ describe('CSV', () => {
       csv.clear();
       expect(csv).toEqual([header]);
       expect(csv.length).toBe(1);
-
-    })
-  })
+    });
+  });
 
   // describe('readString', () => {
   //   it('should parse a CSV string and return a CSV object', () => {
