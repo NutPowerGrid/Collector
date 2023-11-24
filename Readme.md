@@ -21,6 +21,7 @@ Easily send notification on power loss to
 
 - Export to
   - API (JSON)
+  - SQL DB
 
 ## 📦 Installation :
 
