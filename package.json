@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "bun run --watch src/index.ts",
     "format": "prettier --write src/*.ts src/**/*.ts",
-    "lint": "eslint src/**",
+    "lint": "eslint . --config .eslintrc.cjs --ext .ts",
     "start": "bun run src/index.ts"
   },
   "repository": {
@@ -18,13 +18,17 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.59.6",
     "@typescript-eslint/parser": "^5.59.6",
-    "eslint": "^8.41.0",
-    "prettier": "^2.8.8"
+    "eslint": "^8.54.0",
+    "prettier": "^2.8.8",
+    "bun-types": "latest"
   },
   "dependencies": {
     "@influxdata/influxdb-client": "^1.33.2",
     "@lv00/dot-parser": "^1.0.7",
     "discord.js": "^13.16.0",
     "winston": "^3.8.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }
