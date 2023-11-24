@@ -27,7 +27,7 @@ export default class CSVPlugin extends Plugin {
   send(d: UPS) {
     this.csv.addSequentially(new Date().toISOString());
 
-    this.headerMapping.forEach(({ name, location }) => {
+    this.headerMapping.forEach(({ location }) => {
       const value = location.reduce((acc, cur) => (acc as any)[cur], d as any);
       this.csv.addSequentially(value);
     });
