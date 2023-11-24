@@ -1,4 +1,4 @@
-import { InfluxDB, Point } from '@influxdata/influxdb-client';
+import { InfluxDB, Point, WriteApi } from '@influxdata/influxdb-client';
 import logger from '../logger';
 import { BaseModelObj } from '../env';
 import Plugin from './index';
@@ -51,11 +51,10 @@ class Influx extends Plugin {
   }
 
   send(d: UPS): void {
-    const { client } = this;
     const { BUCKET, ORG, HOST } = this.config;
-    if (!client) console.warn('client not ready');
+    if (!this.client) console.warn('client not ready');
     else {
-      const writeApi = client.getWriteApi(ORG.toString(), BUCKET.toString()) || undefined;
+      let writeApi: undefined | WriteApi = this.client.getWriteApi(ORG.toString(), BUCKET.toString()) || undefined;
 
       const tags = {
         host: HOST ? HOST.toString() : hostname(),
@@ -86,6 +85,7 @@ class Influx extends Plugin {
         if (process.env.DEBUG) console.error(err);
         logger.log('error', 'Unable to access influx DB');
       });
+      writeApi = undefined;
     }
   }
 
