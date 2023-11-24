@@ -10,6 +10,8 @@
 name: ESLint
 
 on:
+  push:
+    branches: ["latest"]
   pull_request:
     paths:
       - '**.ts'
