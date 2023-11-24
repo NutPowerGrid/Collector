@@ -45,3 +45,15 @@ docker run -d \
 
 #### InfluxDB + Chronograf
 <img width="1385" alt="image" src="https://github.com/NutPowerGrid/Collector/assets/56845767/aee5ba44-55a8-42b4-9b65-4ad4b2bfef59">
+
+#### On startup
+```bash
+$ bun run src/index.ts
+warn: Missing required environment variable: PATH -> JSON
+warn: Missing required environment variable: PATH -> CSV
+info: Power monitor enable
+info: Loaded plugins (3):
+ • DiscordHook
+ • Gotify
+ • Influx
+```
