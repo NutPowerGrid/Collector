@@ -39,9 +39,9 @@ export default class CSVPlugin extends Plugin {
     } else {
       const csvString = '\r\n' + this.csv.toString(';', false);
       fs.appendFileSync(this.path, csvString, 'utf8');
-      //remove points written to csv
-      this.csv.clear();
     }
+    //remove points written to csv
+    this.csv.clear();
   }
 
   close() {
