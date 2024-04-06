@@ -16,9 +16,11 @@ abstract class Plugin {
   };
 
   headerMapping: Array<{ name: string; location: string[] }> = [
-    { name: 'realpower', location: ['ups', 'realpower'] },
     { name: 'status', location: ['ups', 'status'] },
     { name: 'runtime', location: ['battery', 'runtime'] },
+    { name: 'battery_charge', location: ['battery', 'charge', '_value'] },
+    { name: 'load', location: ['ups', 'load'] },
+    { name: 'realpower', location: ['ups', 'realpower'] },
     { name: 'input_frequency', location: ['input', 'frequency'] },
     { name: 'input_voltage', location: ['input', 'voltage', '_value'] },
     { name: 'output_frequency', location: ['output', 'frequency', '_value'] },

@@ -4,7 +4,7 @@ import logger from 'logger';
 import { BaseModelObj } from 'env';
 import { CSV } from 'csv';
 
-export default class CSVPlugin extends Plugin {
+export default class Csv extends Plugin {
   static _prefix = 'CSV';
   static _model: BaseModelObj = {
     path: {
@@ -28,7 +28,7 @@ export default class CSVPlugin extends Plugin {
     this.csv.addSequentially(new Date().toISOString());
 
     this.headerMapping.forEach(({ location }) => {
-      const value = location.reduce((acc, cur) => (acc as any)[cur], d as any);
+      const value = location.reduce((acc, cur) => acc[cur], d as any);
       this.csv.addSequentially(value);
     });
 
