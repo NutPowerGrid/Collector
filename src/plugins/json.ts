@@ -42,7 +42,7 @@ export default class Json extends Plugin {
       }
 
       dataArray.push(data);
-      fs.writeFileSync(this.path, JSON.stringify(dataArray), 'utf8');
+      fs.writeFileSync(this.path, JSON.stringify(dataArray, null, 2), 'utf8');
     } catch (error) {
       logger.log({
         level: 'error',
