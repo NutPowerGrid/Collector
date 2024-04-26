@@ -26,6 +26,7 @@
     "@influxdata/influxdb-client": "^1.33.2",
     "@lv00/dot-parser": "^1.0.7",
     "discord.js": "^13.16.0",
+    "elysia": "^1.0.14",
     "winston": "^3.8.2"
   },
   "peerDependencies": {
