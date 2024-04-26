@@ -50,14 +50,15 @@ export default class Api extends Plugin {
       .get(
         '/',
         ({ query }) => {
-          const max = parseInt(query.max || "10");
+          const max = parseInt(query.max || '10');
           return this.buffer.slice(0, max).toString();
         },
         {
           query: t.Partial(
             t.Object({
-              max: t.String({ default: '10', }),
-            })),
+              max: t.String({ default: '10' }),
+            }),
+          ),
         },
       )
       .listen(PORT);
