@@ -35,7 +35,7 @@ class DiscordHook extends Plugin {
       .send({
         embeds: [embed],
       })
-      .catch(() => logger.log('error', 'Unable to access discord'));
+      .catch(() => logger.catch);
   }
 
   send(d: UPS): void {
@@ -52,7 +52,7 @@ class DiscordHook extends Plugin {
       })
       .catch((err) => {
         if (process.env.DEBUG) console.error(err);
-        logger.log('error', 'Unable to access discord');
+        logger.catch(new Error('Unable to access discord'));
       });
 
     this.previousState = powerState;
@@ -60,7 +60,7 @@ class DiscordHook extends Plugin {
 
   close(): void {
     this.webhookClient.destroy();
-    logger.log('info', 'Discord plugin closed');
+    logger.log('Discord plugin closed');
   }
 }
 

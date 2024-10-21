@@ -83,14 +83,14 @@ class Influx extends Plugin {
       writeApi.writePoints(points);
       writeApi.close().catch((err: Error) => {
         if (process.env.DEBUG) console.error(err);
-        logger.log('error', 'Unable to access influx DB');
+        logger.catch(new Error('Unable to access influx DB'));
       });
       writeApi = undefined;
     }
   }
 
   close(): void {
-    logger.log('info', 'Influx plugin closed');
+    logger.log('Influx plugin closed');
   }
 }
 

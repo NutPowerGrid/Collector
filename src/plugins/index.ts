@@ -1,7 +1,7 @@
 import { BaseModelObj, checkConfig, parseEnv } from '../env';
 import { readdir } from 'node:fs/promises';
 import path from 'node:path';
-import logger from '../logger';
+import logger, { Level } from '../logger';
 
 abstract class Plugin {
   static _model: BaseModelObj;
@@ -45,10 +45,7 @@ export const load = async (): Promise<Plugin[]> => {
 
       // Ignore non-plugin files
       if (!(pluginClass.prototype instanceof Plugin)) {
-        logger.log({
-          level: 'warn',
-          message: `${plugin} is not a valid plugin`,
-        });
+        logger.log(`${plugin} is not a valid plugin`, Level.WARN);
         return null;
       }
 
@@ -62,14 +59,10 @@ export const load = async (): Promise<Plugin[]> => {
         return pluginInstance;
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Unknown error.';
-        logger.log({
-          level: 'warn',
-          message,
-        });
-        return null;
+        logger.log(message, Level.WARN);
       }
     }),
   );
 
-  return validPlugins.filter((plugin) => plugin !== null) as Plugin[];
+  return validPlugins.filter((plugin) => plugin && plugin !== null) as Plugin[];
 };

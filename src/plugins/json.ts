@@ -34,25 +34,19 @@ export default class Json extends Plugin {
           const fileData = fs.readFileSync(this.path, 'utf8');
           dataArray = JSON.parse(fileData);
         } catch (error) {
-          logger.log({
-            level: 'error',
-            message: 'Malformed JSON file',
-          });
+          logger.catch(new Error('Malformed JSON file'));
         }
       }
 
       dataArray.push(data);
       fs.writeFileSync(this.path, JSON.stringify(dataArray, null, 2), 'utf8');
     } catch (error) {
-      logger.log({
-        level: 'error',
-        message: 'Unale to write data to JSON file',
-      });
+      logger.catch(new Error('Unable to write data to JSON file'));
     }
   }
 
   close() {
     // Nothing to do here
-    logger.log('info', 'Closing JSON plugin');
+    logger.log('Closing JSON plugin');
   }
 }

@@ -2,7 +2,7 @@ import Plugin from 'plugins';
 import fs from 'fs';
 import logger from 'logger';
 import { BaseModelObj } from 'env';
-import { CSV } from 'csv';
+import { CSV } from '@lv00/toolkit';
 
 export default class Csv extends Plugin {
   static _prefix = 'CSV';
@@ -46,6 +46,6 @@ export default class Csv extends Plugin {
 
   close() {
     // Nothing to do here
-    logger.log('info', 'Closing CSV plugin');
+    logger.log('Closing CSV plugin');
   }
 }

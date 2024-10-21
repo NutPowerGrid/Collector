@@ -45,7 +45,7 @@ class Gotify extends Plugin {
       headers: { 'Content-Type': 'application/json', 'X-Gotify-Key': TOKEN },
     }).catch((err) => {
       if (process.env.DEBUG) console.error(err);
-      logger.log('error', 'Unable to access gotify');
+      logger.catch(new Error('Unable to access gotify'));
     });
   }
 
@@ -68,14 +68,14 @@ class Gotify extends Plugin {
       headers: { 'Content-Type': 'application/json', 'X-Gotify-Key': TOKEN },
     }).catch((err) => {
       if (process.env.DEBUG) console.error(err);
-      logger.log('error', 'Unable to access gotify');
+      logger.catch(new Error('Unable to access gotify'));
     });
 
     this.previousState = powerState;
   }
 
   close(): void {
-    logger.log('info', 'Gotify plugin closed');
+    logger.log('Gotify plugin closed');
   }
 }
 

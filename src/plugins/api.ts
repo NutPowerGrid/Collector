@@ -29,7 +29,7 @@ export default class Api extends Plugin {
   static _model: BaseModelObj = {
     port: {
       type: 'number',
-      required: false,
+      required: true,
       default: 3000,
     },
     buffer_size: {

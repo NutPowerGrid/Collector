@@ -1,4 +1,4 @@
-import dotParser from '@lv00/dot-parser';
+import { Parser } from '@lv00/toolkit';
 import { promisify } from 'util';
 import { exec } from 'node:child_process';
 import { BaseModelObj, checkConfig, ipRegex, nameRegex, parseEnv, portRegex } from './env';
@@ -36,7 +36,7 @@ const model: BaseModelObj = {
   },
 };
 
-export default class Nut {
+export default class Nut{
   readonly ip: string;
   readonly port: number;
   readonly name: string;
@@ -66,14 +66,14 @@ export default class Nut {
         this.errorCount = 0;
       } catch (e) {
         const error = e as Error;
-        logger.log({ level: 'error', message: error.message });
+        logger.catch(error);
         this.errorCount++;
         if (this.errorCount > this.retries) {
-          logger.log({ level: 'error', message: `Unable to read data from Nut after ${this.retries} retries -> Exiting` });
+          logger.catch(new Error(`Unable to read data from Nut after ${this.retries} retries -> Exiting`));
           clearInterval(inter);
           process.exit(1);
         } else {
-          logger.log({ level: 'error', message: 'Unable to read data from Nut' });
+          logger.catch(new Error('Unable to read data from Nut'));
         }
       }
     };
@@ -85,7 +85,7 @@ export default class Nut {
   async read() {
     const { stderr, stdout } = await run(this.CMD);
     if (stderr) throw new Error(stderr);
-    const data = dotParser(stdout) as UPS;
+    const data = Parser.dot(stdout) as UPS;
     if (!data) throw new Error('Unable to parse data from Nut');
     return data;
   }

@@ -1,9 +1,27 @@
-import { createLogger, format, transports } from 'winston';
+import { Log } from '@lv00/toolkit';
 
-const logger = createLogger({
-  level: 'info',
-  format: format.simple(),
-  transports: [new transports.File({ filename: 'log/error.log', level: 'error' }), new transports.Console()],
-});
+const { Logger, Console, File, Level } = Log;
+
+const l = [
+  Level.INFO,
+  Level.WARN,
+  Level.ERROR,
+  Level.OK,
+];
+
+if (process.env.NODE_ENV === 'development') {
+  l.push(Level.DEBUG);
+}
+
+const logger = new Logger(
+  {
+    t: [
+      new Console({ l }),
+      new File({ l, path: 'info.log' }),
+    ]
+  }
+);
+
 
 export default logger;
+export { Level };
